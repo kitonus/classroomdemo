@@ -1,0 +1,8 @@
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost/bookstore    username: bookstore    password: password
+    hikari:      maximum-pool-size: 3      connection-test-query: select 1
+  session:    jdbc:      initialize-schema: always
+    timeout: 10m  jpa:    hibernate:      ddl-auto: update
+    database: postgresql
