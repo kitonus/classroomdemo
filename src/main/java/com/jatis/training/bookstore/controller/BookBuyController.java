@@ -5,12 +5,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,12 +31,16 @@ public class BookBuyController {
 	
 	@PostMapping
 	@Transactional
-	@Secured("ROLE_CASHIER")
 	public BookBuyEntity buy(@RequestBody @Valid BookBuyEntity buy) {
 		return repo.save(buy);
 	}
 	
-	@GetMapping("/{yyMMdd}")
+	@GetMapping("/byId/{trxId}")
+	public BookBuyEntity get(@PathVariable UUID trxId) {
+		return repo.findById(trxId).orElse(null);
+	}
+	
+	@GetMapping("/byDate/{yyMMdd}")
 	public List<BookBuyEntity> list(@PathVariable String yyMMdd) throws ParseException{
 		Date today = DateUtils.truncate(new SimpleDateFormat("yyMMdd").parse(yyMMdd), Calendar.DATE);
 		return repo.findByTrxDate(
